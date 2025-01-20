@@ -9,16 +9,32 @@ class ComidaViewModel extends ChangeNotifier {
     //Instancia da classe Comida
     Comida(
         preco: 20.00,
-        nome: "Hamburguer pesadaoo",
+        nome: "Hamburguer pesadão e bem gordão",
         restaurante: "Restaurante do Bilu",
         avaliacao: "5.0",
-        foto: "assets/hamburguer_1.jpg"),
+        foto: "assets/hamburguer_1.jpg",
+        tempoMedio: "30 min"),
     Comida(
         preco: 20.00,
-        nome: "Hamburguer pesadaoo",
+        nome: "Hamburguer ratão",
         restaurante: "Restaurante do Bilu",
         avaliacao: "5.0",
-        foto: "assets/hamburguer_2.jpg"),
+        foto: "assets/hamburguer_2.jpg",
+        tempoMedio: "35 min"),
+    Comida(
+        preco: 20.00,
+        nome: "Hamburguer tradicional",
+        restaurante: "Restaurante do Bilu",
+        avaliacao: "5.0",
+        foto: "assets/hamburguer_3.jpg",
+        tempoMedio: "35 min"),
+    Comida(
+        preco: 20.00,
+        nome: "Hamburguer recheado",
+        restaurante: "Restaurante do Bilu",
+        avaliacao: "5.0",
+        foto: "assets/hamburguer_4.jpeg",
+        tempoMedio: "35 min"),
   ];
 
   //Função referente a gerenciar os dados

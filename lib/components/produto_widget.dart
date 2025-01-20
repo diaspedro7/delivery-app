@@ -44,13 +44,14 @@ class ProdutoWidget extends StatelessWidget {
             child: Image.asset(
               comida.foto,
               width: containerSize.maxWidth, //* 0.9,
-              height: containerSize.maxHeight * 0.5,
+              height: containerSize.maxHeight * 0.59,
               fit: BoxFit.fitWidth,
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.only(left: 10.0, right: 10.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: containerSize.maxHeight * 0.03),
                 Row(
@@ -80,11 +81,11 @@ class ProdutoWidget extends StatelessWidget {
                 SizedBox(height: containerSize.maxHeight * 0.02),
                 Text(
                   comida.nome,
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.start,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                      fontSize: containerSize.maxHeight * 0.05,
+                      fontSize: containerSize.maxHeight * 0.065,
                       color: Colors.black),
                 ),
                 SizedBox(height: containerSize.maxHeight * 0.02),
@@ -95,6 +96,15 @@ class ProdutoWidget extends StatelessWidget {
                         fontSize: containerSize.maxHeight * 0.05,
                         fontWeight: FontWeight.w700,
                         color: Colors.grey.shade600)),
+                Text(
+                  comida.tempoMedio,
+                  textAlign: TextAlign.start,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      fontSize: containerSize.maxHeight * 0.05,
+                      color: Colors.black),
+                ),
               ],
             ),
           ),

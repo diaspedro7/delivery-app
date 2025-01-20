@@ -7,7 +7,7 @@ class RestauranteViewModel extends ChangeNotifier {
         nome: "Restaurante do Bilu",
         distancia: "4 km",
         tempoMedio: "50 - 90 min",
-        precoMinimo: "17, 00",
+        frete: "17, 00",
         avaliacao: "4.3",
         foto: "assets/restaurante.jpeg"),
   ];

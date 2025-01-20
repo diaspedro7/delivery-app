@@ -117,7 +117,7 @@ class RestauranteWidget extends StatelessWidget {
                                     fontWeight: FontWeight.bold,
                                   )),
                               SizedBox(width: tileSize.maxWidth * 0.02),
-                              Text(restaurante.precoMinimo,
+                              Text(restaurante.frete,
                                   textAlign: TextAlign.start,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(

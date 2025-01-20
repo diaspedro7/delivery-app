@@ -120,7 +120,7 @@ class _HomePageState extends State<HomePage> {
                                         imageWidth: size.maxWidth * 0.3,
                                         card: cardsVM.listaCards[realIndex],
                                       ),
-                                      selectedCardWidget(
+                                      SelectedCardWidget(
                                         cardsVM: cardsVM,
                                         homepageVM: homepageVM,
                                         width: size.maxWidth,
@@ -149,7 +149,7 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                     Container(
-                        height: size.maxHeight * 0.5,
+                        height: size.maxHeight * 0.4,
                         width: size.maxWidth * 0.95,
                         padding: EdgeInsets.all(0.0),
                         child: SingleChildScrollView(
@@ -159,7 +159,7 @@ class _HomePageState extends State<HomePage> {
                               return Padding(
                                 padding: const EdgeInsets.only(right: 30.0),
                                 child: SizedBox(
-                                    height: size.maxHeight * 0.42,
+                                    height: size.maxHeight * 0.35,
                                     child: ProdutoWidget(comida: comida)),
                               );
                             }).toList()))),
@@ -204,8 +204,8 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class selectedCardWidget extends StatelessWidget {
-  const selectedCardWidget({
+class SelectedCardWidget extends StatelessWidget {
+  const SelectedCardWidget({
     super.key,
     required this.cardsVM,
     required this.homepageVM,
@@ -232,8 +232,8 @@ class selectedCardWidget extends StatelessWidget {
                 return Padding(
                   padding: const EdgeInsets.only(right: 4.0),
                   child: Container(
-                    width: 10,
-                    height: 10,
+                    width: 5,
+                    height: 5,
                     decoration: BoxDecoration(
                         color: homepageVM.selectedCardIndex == index
                             ? Colors.grey.shade800.withOpacity(0.8)

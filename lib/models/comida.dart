@@ -6,6 +6,7 @@ class Comida {
   String restaurante;
   String avaliacao;
   String foto;
+  final String tempoMedio;
 
   //Construtor da Classe
   Comida(
@@ -13,7 +14,8 @@ class Comida {
       required this.nome,
       required this.restaurante,
       required this.avaliacao,
-      required this.foto});
+      required this.foto,
+      required this.tempoMedio});
 
   //Função que trabalha os dados da classe
   double calcularPrecoComDesconto({required double desconto}) {
