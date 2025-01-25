@@ -41,7 +41,7 @@ class ProdutoWidget extends StatelessWidget {
               topLeft: Radius.circular(20),
               topRight: Radius.circular(20),
             ),
-            child: Image.asset(
+            child: Image.network(
               comida.foto,
               width: containerSize.maxWidth, //* 0.9,
               height: containerSize.maxHeight * 0.59,
