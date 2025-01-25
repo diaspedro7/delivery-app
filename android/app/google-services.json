@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "465766396982",
+    "project_id": "app-delivery-18bb7",
+    "storage_bucket": "app-delivery-18bb7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:465766396982:android:16a3c699f4d5bac74d1497",
+        "android_client_info": {
+          "package_name": "com.example.exemplo_mvvm_lancheria"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTLkiH0_xPDXP0m3DMIFkblMajcZVsYho"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

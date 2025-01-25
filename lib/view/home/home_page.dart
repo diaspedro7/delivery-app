@@ -1,17 +1,18 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:exemplo_mvvm_lancheria/components/barra_navegacao_widget.dart';
-import 'package:exemplo_mvvm_lancheria/components/card_widget.dart';
-import 'package:exemplo_mvvm_lancheria/components/produto_widget.dart';
-import 'package:exemplo_mvvm_lancheria/components/restaurante_widget.dart';
+import 'package:exemplo_mvvm_lancheria/models/comida.dart';
+import 'package:exemplo_mvvm_lancheria/providers/firestore_database_viewmodel.dart';
+import 'package:exemplo_mvvm_lancheria/view/home/components/barra_navegacao_widget.dart';
+import 'package:exemplo_mvvm_lancheria/view/home/components/card_widget.dart';
+import 'package:exemplo_mvvm_lancheria/view/home/components/produto_widget.dart';
+import 'package:exemplo_mvvm_lancheria/view/home/components/restaurante_widget.dart';
+import 'package:exemplo_mvvm_lancheria/providers/cards_viewmodel.dart';
 import 'package:exemplo_mvvm_lancheria/providers/comida_viewmodel.dart';
 import 'package:exemplo_mvvm_lancheria/providers/home_viewmodel.dart';
 import 'package:exemplo_mvvm_lancheria/providers/restaurante_viewmodel.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../providers/cards_viewmodel.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -27,6 +28,8 @@ class _HomePageState extends State<HomePage> {
     final restauranteVM = Provider.of<RestauranteViewModel>(context);
     final cardsVM = Provider.of<CardsViewModel>(context);
     final homepageVM = Provider.of<HomePageViewModel>(context);
+    final firestoreDatabaseVM =
+        Provider.of<FirestoreDatabaseViewModel>(context);
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -50,6 +53,14 @@ class _HomePageState extends State<HomePage> {
               ),
             )
           ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            debugPrint("Apertou o botao");
+            // firestoreDatabaseVM.addData(comidaVM.listaComida);
+            firestoreDatabaseVM.getProductsData();
+          },
+          child: Text("Pegar dados"),
         ),
         body: Padding(
           padding: const EdgeInsets.only(top: 20.0, left: 14.0, right: 14.0),
@@ -149,20 +160,55 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                     Container(
-                        height: size.maxHeight * 0.4,
-                        width: size.maxWidth * 0.95,
-                        padding: EdgeInsets.all(0.0),
-                        child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                                children: comidaVM.listaComida.map((comida) {
-                              return Padding(
-                                padding: const EdgeInsets.only(right: 30.0),
-                                child: SizedBox(
-                                    height: size.maxHeight * 0.35,
-                                    child: ProdutoWidget(comida: comida)),
-                              );
-                            }).toList()))),
+                      height: size.maxHeight * 0.4,
+                      width: size.maxWidth * 0.95,
+                      padding: EdgeInsets.all(0.0),
+                      child: FutureBuilder<List<Comida>>(
+                        future: firestoreDatabaseVM.getProductsData(),
+                        builder: (context, snapshot) {
+                          // if (snapshot.connectionState ==
+                          //     ConnectionState.waiting) {
+                          //   // Mostra um indicador de carregamento enquanto os dados estão sendo carregados
+                          //   return const Center(
+                          //       child: CircularProgressIndicator());
+                          // }
+                          if (snapshot.hasError) {
+                            // Mostra uma mensagem de erro se algo deu errado
+                            return Center(
+                              child: Text(
+                                  'Erro ao carregar dados: ${snapshot.error}'),
+                            );
+                          } else if (!snapshot.hasData ||
+                              snapshot.data!.isEmpty) {
+                            // Mostra uma mensagem se não houver dados
+                            return const Center(
+                                child: Text('Nenhum produto encontrado.'));
+                          }
+
+                          // Renderiza os widgets quando os dados são carregados
+                          final listaComida = snapshot.data!;
+                          return SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                  //     children: comidaVM.listaComida.map((comida) {
+                                  //   return Padding(
+                                  //     padding: const EdgeInsets.only(right: 30.0),
+                                  //     child: SizedBox(
+                                  //         height: size.maxHeight * 0.35,
+                                  //         child: ProdutoWidget(comida: comida)),
+                                  //   );
+                                  // }).toList()))),
+                                  children: listaComida.map((comida) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(right: 30.0),
+                                  child: SizedBox(
+                                      height: size.maxHeight * 0.35,
+                                      child: ProdutoWidget(comida: comida)),
+                                );
+                              }).toList()));
+                        },
+                      ),
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
