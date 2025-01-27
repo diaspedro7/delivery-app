@@ -2,21 +2,32 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:exemplo_mvvm_lancheria/models/comida.dart';
 
 class FirestoreDatabaseRepository {
-  Future getDados() async {
-    QuerySnapshot<Map<String, dynamic>> dado;
+  Future getProducts() async {
+    QuerySnapshot<Map<String, dynamic>> data;
     try {
-      dado = await FirebaseFirestore.instance.collection("produtos").get();
+      data = await FirebaseFirestore.instance.collection("products").get();
 
-      return dado.docs.map((doc) => doc.data()).toList();
+      return data.docs.map((doc) => doc.data()).toList();
     } catch (e) {
-      throw Exception("Erro na funcao getDados");
+      throw Exception("---Error in getProducts(): $e---");
+    }
+  }
+
+  Future getRestaurants() async {
+    QuerySnapshot<Map<String, dynamic>> data;
+    try {
+      data = await FirebaseFirestore.instance.collection("restaurants").get();
+
+      return data.docs.map((doc) => doc.data()).toList();
+    } catch (e) {
+      throw Exception("---Error in getRestaurants(): $e---");
     }
   }
 
   addData(List<Comida> listaComida) async {
     try {
       for (int i = 0; i < listaComida.length; i++) {
-        await FirebaseFirestore.instance.collection("produtos").add({
+        await FirebaseFirestore.instance.collection("products").add({
           "preco": listaComida[i].preco,
           "nome": listaComida[i].nome,
           "restaurante": listaComida[i].restaurante,

@@ -1,15 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:exemplo_mvvm_lancheria/models/comida.dart';
-import 'package:exemplo_mvvm_lancheria/viewmodels/firestore_database_viewmodel.dart';
+import 'package:exemplo_mvvm_lancheria/models/restaurantes.dart';
 import 'package:exemplo_mvvm_lancheria/view/home/components/barra_navegacao_widget.dart';
 import 'package:exemplo_mvvm_lancheria/view/home/components/card_widget.dart';
 import 'package:exemplo_mvvm_lancheria/view/home/components/produto_widget.dart';
 import 'package:exemplo_mvvm_lancheria/view/home/components/restaurante_widget.dart';
 import 'package:exemplo_mvvm_lancheria/viewmodels/cards_viewmodel.dart';
-import 'package:exemplo_mvvm_lancheria/viewmodels/comida_viewmodel.dart';
 import 'package:exemplo_mvvm_lancheria/viewmodels/home_viewmodel.dart';
-import 'package:exemplo_mvvm_lancheria/viewmodels/restaurante_viewmodel.dart';
 import 'package:exemplo_mvvm_lancheria/view/home/home_agreggator.dart';
 
 import 'package:flutter/material.dart';
@@ -158,10 +156,9 @@ class _HomePageState extends State<HomePage> {
                             )),
                       ],
                     ),
-                    Container(
+                    SizedBox(
                       height: size.maxHeight * 0.4,
                       width: size.maxWidth * 0.95,
-                      padding: EdgeInsets.all(0.0),
                       child: FutureBuilder<List<Comida>>(
                         future: homeAggregator.firestoreDatabaseVM
                             .getProductsData(),
@@ -226,23 +223,71 @@ class _HomePageState extends State<HomePage> {
                     SizedBox(
                       //height: size.maxHeight * 0.5,
                       width: size.maxWidth,
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: Column(
-                          children: homeAggregator
-                              .restauranteVM.listaRestaurante
-                              .map((restaurante) {
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 18.0),
-                              child: SizedBox(
-                                  width: size.maxWidth * 0.95,
-                                  height: size.maxHeight * 0.12,
-                                  child: RestauranteWidget(
-                                      restaurante: restaurante)),
+                      child: FutureBuilder<List<Restaurante>>(
+                        future: homeAggregator.firestoreDatabaseVM
+                            .getRestaurantsData(),
+                        builder: (context, snapshot) {
+                          // if (snapshot.connectionState ==
+                          //     ConnectionState.waiting) {
+                          //   // Mostra um indicador de carregamento enquanto os dados estão sendo carregados
+                          //   return const Center(
+                          //       child: CircularProgressIndicator());
+                          // }
+                          if (snapshot.hasError) {
+                            // Mostra uma mensagem de erro se algo deu errado
+                            return Center(
+                              child: Text(
+                                  'Erro ao carregar dados: ${snapshot.error}'),
                             );
-                          }).toList(),
-                        ),
+                          } else if (!snapshot.hasData ||
+                              snapshot.data!.isEmpty) {
+                            // Mostra uma mensagem se não houver dados
+                            return const Center(
+                                child: Text('Nenhum produto encontrado.'));
+                          }
+
+                          // Renderiza os widgets quando os dados são carregados
+                          final listaRestaurant = snapshot.data!;
+                          return SingleChildScrollView(
+                              scrollDirection: Axis.vertical,
+                              child: Row(
+                                  //     children: comidaVM.listaComida.map((comida) {
+                                  //   return Padding(
+                                  //     padding: const EdgeInsets.only(right: 30.0),
+                                  //     child: SizedBox(
+                                  //         height: size.maxHeight * 0.35,
+                                  //         child: ProdutoWidget(comida: comida)),
+                                  //   );
+                                  // }).toList()))),
+                                  children: listaRestaurant.map((restaurant) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 18.0),
+                                  child: SizedBox(
+                                      width: size.maxWidth * 0.95,
+                                      height: size.maxHeight * 0.12,
+                                      child: RestauranteWidget(
+                                          restaurante: restaurant)),
+                                );
+                              }).toList()));
+                        },
                       ),
+                      // SingleChildScrollView(
+                      //   scrollDirection: Axis.vertical,
+                      //   child: Column(
+                      //     children: homeAggregator
+                      //         .restauranteVM.listaRestaurante
+                      //         .map((restaurante) {
+                      //       return Padding(
+                      //         padding: const EdgeInsets.only(bottom: 18.0),
+                      //         child: SizedBox(
+                      //             width: size.maxWidth * 0.95,
+                      //             height: size.maxHeight * 0.12,
+                      //             child: RestauranteWidget(
+                      //                 restaurante: restaurante)),
+                      //       );
+                      //     }).toList(),
+                      //   ),
+                      // ),
                     ),
                   ]),
             );

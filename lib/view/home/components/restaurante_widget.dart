@@ -45,7 +45,7 @@ class RestauranteWidget extends StatelessWidget {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
-                          image: AssetImage(restaurante.foto),
+                          image: NetworkImage(restaurante.foto),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -53,13 +53,17 @@ class RestauranteWidget extends StatelessWidget {
                     Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(restaurante.nome,
-                              textAlign: TextAlign.start,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  fontSize: tileSize.maxHeight * 0.2,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold)),
+                          SizedBox(
+                            width: tileSize.maxWidth * 0.65,
+                            child: Text(restaurante.nome,
+                                textAlign: TextAlign.start,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: TextStyle(
+                                    fontSize: tileSize.maxHeight * 0.2,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold)),
+                          ),
                           Row(
                             children: [
                               Text(restaurante.distancia,

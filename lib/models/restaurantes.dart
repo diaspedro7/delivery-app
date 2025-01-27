@@ -13,4 +13,15 @@ class Restaurante {
       required this.frete,
       required this.avaliacao,
       required this.foto});
+
+  factory Restaurante.fromMap(Map<String, dynamic> map) {
+    return Restaurante(
+      nome: map['nome'] ?? '',
+      distancia: (map['distancia']) ?? '',
+      frete: map['frete'] ?? '',
+      avaliacao: map['avaliacao'] ?? '',
+      foto: map['foto'] ?? '',
+      tempoMedio: map['tempoMedio'] ?? '',
+    );
+  }
 }
