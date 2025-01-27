@@ -1,15 +1,16 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:exemplo_mvvm_lancheria/models/comida.dart';
-import 'package:exemplo_mvvm_lancheria/providers/firestore_database_viewmodel.dart';
+import 'package:exemplo_mvvm_lancheria/viewmodels/firestore_database_viewmodel.dart';
 import 'package:exemplo_mvvm_lancheria/view/home/components/barra_navegacao_widget.dart';
 import 'package:exemplo_mvvm_lancheria/view/home/components/card_widget.dart';
 import 'package:exemplo_mvvm_lancheria/view/home/components/produto_widget.dart';
 import 'package:exemplo_mvvm_lancheria/view/home/components/restaurante_widget.dart';
-import 'package:exemplo_mvvm_lancheria/providers/cards_viewmodel.dart';
-import 'package:exemplo_mvvm_lancheria/providers/comida_viewmodel.dart';
-import 'package:exemplo_mvvm_lancheria/providers/home_viewmodel.dart';
-import 'package:exemplo_mvvm_lancheria/providers/restaurante_viewmodel.dart';
+import 'package:exemplo_mvvm_lancheria/viewmodels/cards_viewmodel.dart';
+import 'package:exemplo_mvvm_lancheria/viewmodels/comida_viewmodel.dart';
+import 'package:exemplo_mvvm_lancheria/viewmodels/home_viewmodel.dart';
+import 'package:exemplo_mvvm_lancheria/viewmodels/restaurante_viewmodel.dart';
+import 'package:exemplo_mvvm_lancheria/view/home/home_agreggator.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,12 +25,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    final comidaVM = Provider.of<ComidaViewModel>(context);
-    final restauranteVM = Provider.of<RestauranteViewModel>(context);
-    final cardsVM = Provider.of<CardsViewModel>(context);
-    final homepageVM = Provider.of<HomePageViewModel>(context);
-    final firestoreDatabaseVM =
-        Provider.of<FirestoreDatabaseViewModel>(context);
+    final homeAggregator = Provider.of<HomeAggregator>(context);
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -46,7 +42,7 @@ class _HomePageState extends State<HomePage> {
               )),
           actions: [
             IconButton(
-              onPressed: homepageVM.setSearchIsOn,
+              onPressed: homeAggregator.homepageVM.setSearchIsOn,
               icon: Icon(
                 Icons.search_rounded,
                 color: Colors.red,
@@ -58,7 +54,7 @@ class _HomePageState extends State<HomePage> {
           onPressed: () {
             debugPrint("Apertou o botao");
             // firestoreDatabaseVM.addData(comidaVM.listaComida);
-            firestoreDatabaseVM.getProductsData();
+            homeAggregator.firestoreDatabaseVM.getProductsData();
           },
           child: Text("Pegar dados"),
         ),
@@ -71,7 +67,7 @@ class _HomePageState extends State<HomePage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Visibility(
-                      visible: homepageVM.searchIsOn,
+                      visible: homeAggregator.homepageVM.searchIsOn,
                       child: Column(
                         children: [
                           Container(
@@ -109,13 +105,15 @@ class _HomePageState extends State<HomePage> {
                           child: PageView.builder(
                               controller: PageController(),
                               scrollDirection: Axis.horizontal,
-                              onPageChanged: (value) =>
-                                  homepageVM.setselectedCardIndex(
-                                      value % cardsVM.listaCards.length),
+                              onPageChanged: (value) => homeAggregator
+                                  .homepageVM
+                                  .setselectedCardIndex(value %
+                                      homeAggregator.cardsVM.listaCards.length),
                               //itemCount: cardsVM.listaCards.length,
                               itemBuilder: (context, index) {
                                 final realIndex = index %
-                                    cardsVM.listaCards.length; //To make an loop
+                                    homeAggregator.cardsVM.listaCards
+                                        .length; //To make an loop
                                 debugPrint("Index: $index");
 
                                 return Padding(
@@ -129,11 +127,12 @@ class _HomePageState extends State<HomePage> {
                                         backgroundDecorWidth:
                                             size.maxWidth * 0.55,
                                         imageWidth: size.maxWidth * 0.3,
-                                        card: cardsVM.listaCards[realIndex],
+                                        card: homeAggregator
+                                            .cardsVM.listaCards[realIndex],
                                       ),
                                       SelectedCardWidget(
-                                        cardsVM: cardsVM,
-                                        homepageVM: homepageVM,
+                                        cardsVM: homeAggregator.cardsVM,
+                                        homepageVM: homeAggregator.homepageVM,
                                         width: size.maxWidth,
                                       )
                                     ],
@@ -164,7 +163,8 @@ class _HomePageState extends State<HomePage> {
                       width: size.maxWidth * 0.95,
                       padding: EdgeInsets.all(0.0),
                       child: FutureBuilder<List<Comida>>(
-                        future: firestoreDatabaseVM.getProductsData(),
+                        future: homeAggregator.firestoreDatabaseVM
+                            .getProductsData(),
                         builder: (context, snapshot) {
                           // if (snapshot.connectionState ==
                           //     ConnectionState.waiting) {
@@ -229,8 +229,9 @@ class _HomePageState extends State<HomePage> {
                       child: SingleChildScrollView(
                         scrollDirection: Axis.vertical,
                         child: Column(
-                          children:
-                              restauranteVM.listaRestaurante.map((restaurante) {
+                          children: homeAggregator
+                              .restauranteVM.listaRestaurante
+                              .map((restaurante) {
                             return Padding(
                               padding: const EdgeInsets.only(bottom: 18.0),
                               child: SizedBox(
